@@ -22,7 +22,6 @@ function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    
     signin({ username: inputs.username, password: inputs.password })
       .then((response) => {
         if (response) {
@@ -43,6 +42,7 @@ function Login() {
         }
       })
       .catch(() => {
+        //prevent 403
         if (localStorage.getItem("token")) {
           localStorage.removeItem("token");
         }

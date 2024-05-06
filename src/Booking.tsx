@@ -63,39 +63,6 @@ function Booking() {
     return date.day() === 0 || date.day() === 6;
   }
 
-  const onSaveBooking = () => {
-    // prepare header data
-    if (roombynumber && selectedTime && stdNumber) {
-      const data: ISaveBookingData = {
-        startTime: dayjs(selectedTime).format("HH:mm").toString(),
-        endTime: dayjs(selectedTime).add(2, "hour").format("HH:mm").toString(),
-        roomNumber: roombynumber?.roomNumber,
-        studentNumber: stdNumber,
-        date: dayjs(date).format("DD-MM-YYYY").toString(),
-      };
-      // POST with data
-      saveBooking(data)
-        .then((resp) => {
-          Myswal.fire({
-            html: `<i>${resp.msg}</i>`,
-            icon: "success",
-          });
-          fetchTimeTable();
-        })
-        .catch((err) => {
-          Myswal.fire({
-            html: `<i>${err.response.data.message}</i>`,
-            icon: "error",
-          });
-        });
-    } else {
-      Myswal.fire({
-        html: `<i>กรุณาตรวจสอบข้อมูลให้ครบถ้วน</i>`,
-        icon: "error",
-      });
-    }
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStdNumber(event.target.value);
   };
@@ -127,6 +94,39 @@ function Booking() {
     fetchTimeTable();
     //always check if id changed
   }, [fetchTimeTable]);
+
+  const onSaveBooking = () => {
+    // prepare header data
+    if (roombynumber && selectedTime && stdNumber) {
+      const data: ISaveBookingData = {
+        startTime: dayjs(selectedTime).format("HH:mm").toString(),
+        endTime: dayjs(selectedTime).add(2, "hour").format("HH:mm").toString(),
+        roomNumber: roombynumber?.roomNumber,
+        studentNumber: stdNumber,
+        date: dayjs(date).format("DD-MM-YYYY").toString(),
+      };
+      // POST data
+      saveBooking(data)
+        .then((resp) => {
+          Myswal.fire({
+            html: `<i>${resp.msg}</i>`,
+            icon: "success",
+          });
+          fetchTimeTable();
+        })
+        .catch((err) => {
+          Myswal.fire({
+            html: `<i>${err.response.data.message}</i>`,
+            icon: "error",
+          });
+        });
+    } else {
+      Myswal.fire({
+        html: `<i>กรุณาตรวจสอบข้อมูลให้ครบถ้วน</i>`,
+        icon: "error",
+      });
+    }
+  };
 
   const generateDateArray = (startDate: Dayjs) => {
     const endDate = startDate.endOf("week");
@@ -185,7 +185,6 @@ function Booking() {
           const dayOfWeek = dateTime.toDate().getDay();
 
           const dayArray = [
-
             //0
             "sunday",
             "monday",
@@ -470,7 +469,6 @@ function Booking() {
                         boxShadow: "none",
                       },
                     }}
-                
                     onClick={() => {
                       onSaveBooking();
                       setOpen(false);
